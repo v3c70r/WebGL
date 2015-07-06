@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+
+void
+main()
+{
+    gl_Position = vPosition;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+void
+main()
+{
+    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+}
+</script>
+<script>
+  function changeValue()
+  {
+    document.getElementById("iter").innerHTML= document.getElementById("iterInput").value;
+    document.getElementById("coef").innerHTML=document.getElementById("coefInput").value;
+    document.getElementById("theta").innerHTML=document.getElementById("thetaInput").value;
+    changeIter(document.getElementById("iterInput").value,
+            document.getElementById("coefInput").value, 
+            document.getElementById("thetaInput").value,
+            document.getElementById("gasketInput").checked);
+
+  }
+</script>
+
+<script type="text/javascript" src="../../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../../Common/initShaders.js"></script>
+<script type="text/javascript" src="../../Common/flatten.js"></script>
+<script type="text/javascript" src="tessellation.js"></script>
+</head>
+
+<body>
+<canvas id="gl-canvas" width="600" height="600">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<table>
+    <tr>
+        <td>
+        <input id="gasketInput" type="checkbox" value="false" onchange="changeValue()"/> Gasket
+    </td>
+    </tr>
+    <tr>
+        <td>
+            # Tessellation iterations
+        </td>
+        <td>
+            <input id="iterInput" type="range" min="0" max="8" value="0" step="1" onchange="changeValue()"/>
+        </td>
+        <td>
+            <span id="iter">0</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Rotation Coef
+        </td>
+        <td>
+            <input id ="coefInput" type="range" min="0" max="2.0" value="0" step="0.1" onchange="changeValue() "/>
+        </td>
+        <td>
+            <span id="coef">0</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Rotation angle
+        </td>
+
+        <td>
+            <input id ="thetaInput" type="range" min="0" max="2.0" value="0" step="0.1" onchange="changeValue() "/>
+        </td>
+        <td>
+            <span id="theta">0</span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
