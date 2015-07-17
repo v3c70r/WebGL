@@ -78,18 +78,37 @@ window.onload = function init()
     render(numVertices);
 };
 
-function changeIter(iter, coef, theta, gasket)
+function changeIter(iter, coef, theta, gasket, shape)
 {
-    var vertices = [-1/2, -1/2, 0, 1/2, 1/2, -1/2];
+  var vertices;
+  if (shape == "triangle")
+    vertices = [-1/2, -1/2, 0, 1/2, 1/2, -1/2];
+  else if  (shape == "square")
+    vertices = [ -1/2, -1/2, 1/2, -1/2, -1/2, 1/2
+      ,1/2, -1/2, 1/2, 1/2, -1/2, 1/2];
+  else if (shape == "cat")
+    vertices = [-1/2, 1/4, -1/2, 0, 1/2, 0,
+                1/2, 0, 1/2, 1/4, -1/2, 1/4,
+                -1/2, 0, -1/2, -1/4, -1/4, -1/4,
+                -1/4, -1/4, 1/4, -1/4, 0,0,
+                1/4, -1/4, 1/2, -1/4, 1/2, 0,
+                //ears
+                -2/5, 1/4, -1/4, 1/2, 0, 1/4,
+                2/5, 1/4, 1/4, 1/2, 0, 1/4
+                ]
+
+    //do the tesllation of multiple triangles
+    var numTriangle = vertices.length/6;
+    var resVertices = [];
     var numVertices=0;
-    if (iter === '0')
-      numVertices = 3;
-    else
-      vertices = tesllation(vertices, iter, gasket);
-      numVertices = Math.pow(4,iter)*3;
-    vertices = twist(vertices, coef, theta, numVertices);
+    for (var i=0; i< numTriangle; i++)
+    {
+      resVertices = resVertices.concat(tesllation(vertices.slice(i*6, i*6+6), iter, gasket));
+      numVertices += Math.pow(4,iter)*3;
+    }
+    vertices = twist(resVertices, coef, theta, numVertices);
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(resVertices), gl.STATIC_DRAW );
     render(numVertices);
 }
 
